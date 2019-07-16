@@ -3,19 +3,13 @@
 import hashlib
 import sys
 import requests
+import getpass
 
 URL = "https://api.pwnedpasswords.com/range/"
 
-if len(sys.argv) == 0:
-    print("Not enough arguments provided.")
-    sys.exit(1)
+password = getpass.getpass()
 
-password = sys.argv[1].encode('utf-8')
-
-sha_1 = hashlib.sha1()
-sha_1.update(password)
-
-hash = sha_1.hexdigest()
+hash = hashlib.sha1(password.encode('utf-8')).hexdigest()
 
 response = requests.get(URL + hash[:5]).text
 lines = response.split('\n')
@@ -28,8 +22,8 @@ for l in lines:
         break
 
 if not result:
-    print("{} was not found".format(sys.argv[1]))
+    print("The password provided was not found")
     sys.exit(0)
 
-print("{} was found!".format(sys.argv[1]))
+print("The password provided was found!")
 print("Hash {}, occurences {}".format(hash, result.split(':')[1]))
