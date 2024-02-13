@@ -11,7 +11,7 @@ password = getpass.getpass()
 
 hash = hashlib.sha1(password.encode('utf-8')).hexdigest()
 
-response = requests.get(URL + hash[:5]).text
+response = requests.get(URL + hash[:5], allow_redirects=False).text
 lines = response.split('\n')
 
 result = ''
